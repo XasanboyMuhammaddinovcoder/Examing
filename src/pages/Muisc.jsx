@@ -14,6 +14,7 @@ import Union from '../assets/Unionx.svg'
 import Search from '../assets/Search.svg'
 import Clock from '../assets/Clock.svg'
 import '../App.css'
+import { PuffLoader } from 'react-spinners'
 
 function Muisc() {
   const params = useParams()
@@ -41,6 +42,9 @@ function Muisc() {
         });
     }
   }, [])
+  if (!dataMain) {
+    <div className="flex justify-center mt-96"><PuffLoader color="orange"></PuffLoader></div>;
+  }
   function handleRunCLick() {
     setRun(!run)
   }
