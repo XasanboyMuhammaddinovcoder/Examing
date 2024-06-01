@@ -23,9 +23,11 @@ function Muisc() {
   const [run, setRun] = useState(false)
   const [vector, setVector] = useState(false)
   const [playlistItems, setPlaylisItems] = useState([])
+  const [loader, setLoader] = useState(false)
   useEffect(() => {
 
     if (params.id) {
+      setLoader(true)
       fetch(`${import.meta.env.VITE_API_MUSIC}playlists/${params.id}`, {
         method: "GET",
         headers: {
@@ -36,15 +38,16 @@ function Muisc() {
         .then((data) => {
           setPlaylisItems(data.tracks.items);
           setDataMain(data);
+          setLoader(false)
         })
         .catch((err) => {
           console.log(err);
+          setLoader(false)
         });
+
     }
   }, [])
-  if (!dataMain) {
-    <div className="flex justify-center mt-96"><PuffLoader color="orange"></PuffLoader></div>;
-  }
+
   function handleRunCLick() {
     setRun(!run)
   }
@@ -53,163 +56,171 @@ function Muisc() {
   }
   return (
     <>
-      <div
-        className='bg-[#121212] w-[1072px] min-h-[100vh]'>
-        <header
-          className="header bg-[#DDF628] w-full h-40">
+      {
+        !loader && (
+          <div
+            className='bg-[#121212] w-[1072px] min-h-[100vh]'>
+            <header
+              className="header bg-[#DDF628] w-full h-40">
 
-          <div
-            className="nav flex gap-10 px-20 pt-10">
-            <Link
-              className="w-20 h-20 bg-black rounded-[50%] flex justify-center items-center"
-              to='/'>
-              <img
-                src={left}
-                alt=""
-              />
-            </Link>
-            <Link
-              className="w-20 h-20 bg-black rounded-[50%] flex justify-center items-center"
-              to='/likes'>
-              <img
-                src={right}
-                alt=""
-              />
-            </Link>
-          </div>
-        </header>
-        <MusicCard
-          name={dataMain?.name}
-          desc={dataMain?.description}
-          images={dataMain?.images}>
-        </MusicCard>
-        <div
-          className="run__Music px-20 flex justify-between">
-          <div
-            className="run__Music__block1 flex items-center gap-[20px]">
-            <span
-              className='cursor-pointer'
-              onClick={handleRunCLick}>
-              {run ?
+              <div
+                className="nav flex gap-10 px-20 pt-10">
+                <Link
+                  className="w-20 h-20 bg-black rounded-[50%] flex justify-center items-center"
+                  to='/'>
+                  <img
+                    src={left}
+                    alt=""
+                  />
+                </Link>
+                <Link
+                  className="w-20 h-20 bg-black rounded-[50%] flex justify-center items-center"
+                  to='/likes'>
+                  <img
+                    src={right}
+                    alt=""
+                  />
+                </Link>
+              </div>
+            </header>
+            <MusicCard
+              name={dataMain?.name}
+              desc={dataMain?.description}
+              images={dataMain?.images}>
+            </MusicCard>
+            <div
+              className="run__Music px-20 flex justify-between">
+              <div
+                className="run__Music__block1 flex items-center gap-[20px]">
+                <span
+                  className='cursor-pointer'
+                  onClick={handleRunCLick}>
+                  {run ?
+                    <img
+                      width={72}
+                      height={72}
+                      src={pouse}
+                      alt="pause icon"
+                    /> :
+                    <img
+                      width={72}
+                      height={72}
+                      src={play}
+                      alt="play icon"
+                    />
+                  }
+                </span>
+                <span
+                  className='cursor-pointer'
+                  onClick={handleVectorCLick}>
+                  {vector ?
+                    <img
+
+                      width={29}
+                      height={29}
+                      src={vectorof}
+                      alt="vector icon" /> :
+                    <img
+                      width={29}
+                      height={29}
+                      src={vectoron}
+                      alt="vector icon"
+                    />
+                  }
+                </span>
+                <span
+                  className='cursor-pointer'>
+                  <img
+                    width={40}
+                    height={40}
+                    src={Download}
+                    alt="Download icon"
+                  />
+                </span>
+                <span
+                  className='cursor-pointer'>
+                  <img
+                    width={25}
+                    height={25}
+                    src={Union}
+                    alt="Union icon"
+                  />
+                </span>
+              </div>
+              <div
+                className="run__Music__block2 flex items-center gap-5">
+                <span
+                  className='cursor-pointer'>
+                  <img
+                    width={25}
+                    height={25}
+                    src={Search}
+                    alt="Union icon"
+                  />
+                </span>
+                <select
+                  className='bg-transparent outline-none text-white text-[16px] cursor-pointer'>
+                  <option
+                    className='bg-transparent text-[16px] text-white'
+                    value="Custom order">
+                    Custom order
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div
+              className="table_r text-white flex justify-between mt-16 px-20">
+              <p
+                className='text-[16px] list-none'>
+                #
+              </p>
+              <p
+                className='text-[16px] list-none'>
+                TITLE
+              </p>
+              <p
+                className='text-[16px] list-none relative left-12'>
+
+                ALBUM
+              </p>
+              <p
+                className='text-[16px] list-none'>
+                DATE ADDED
+              </p>
+              <p
+                className='text-[16px] list-none'>
                 <img
-                  width={72}
-                  height={72}
-                  src={pouse}
-                  alt="pause icon"
-                /> :
-                <img
-                  width={72}
-                  height={72}
-                  src={play}
-                  alt="play icon"
+                  src={Clock}
+                  alt=""
                 />
-              }
-            </span>
-            <span
-              className='cursor-pointer'
-              onClick={handleVectorCLick}>
-              {vector ?
-                <img
+              </p>
+            </div>
+            <div
+              className='px-20 mt-8'>
+              <hr />
+            </div>
+            <div
+              className="playlist__wrapper flex flex-col gap-20 mb-60 mt-20">
 
-                  width={29}
-                  height={29}
-                  src={vectorof}
-                  alt="vector icon" /> :
-                <img
-                  width={29}
-                  height={29}
-                  src={vectoron}
-                  alt="vector icon"
-                />
+              {
+                playlistItems.map((el, index) => {
+                  return (
+                    <PlaylistCard
+                      data={el}
+                      key={index}
+                      dataIndex={index}
+                    >
+                    </PlaylistCard>
+                  )
+                })
               }
-            </span>
-            <span
-              className='cursor-pointer'>
-              <img
-                width={40}
-                height={40}
-                src={Download}
-                alt="Download icon"
-              />
-            </span>
-            <span
-              className='cursor-pointer'>
-              <img
-                width={25}
-                height={25}
-                src={Union}
-                alt="Union icon"
-              />
-            </span>
+            </div>
           </div>
-          <div
-            className="run__Music__block2 flex items-center gap-5">
-            <span
-              className='cursor-pointer'>
-              <img
-                width={25}
-                height={25}
-                src={Search}
-                alt="Union icon"
-              />
-            </span>
-            <select
-              className='bg-transparent outline-none text-white text-[16px] cursor-pointer'>
-              <option
-                className='bg-transparent text-[16px] text-white'
-                value="Custom order">
-                Custom order
-              </option>
-            </select>
-          </div>
-        </div>
-        <div
-          className="table_r text-white flex justify-between mt-16 px-20">
-          <p
-            className='text-[16px] list-none'>
-            #
-          </p>
-          <p
-            className='text-[16px] list-none'>
-            TITLE
-          </p>
-          <p
-            className='text-[16px] list-none relative left-12'>
-
-            ALBUM
-          </p>
-          <p
-            className='text-[16px] list-none'>
-            DATE ADDED
-          </p>
-          <p
-            className='text-[16px] list-none'>
-            <img
-              src={Clock}
-              alt=""
-            />
-          </p>
-        </div>
-        <div
-          className='px-20 mt-8'>
-          <hr />
-        </div>
-        <div
-          className="playlist__wrapper flex flex-col gap-20 mb-60 mt-20">
-          {
-            playlistItems.map((el, index) => {
-              return (
-                <PlaylistCard
-                  data={el}
-                  key={index}
-                  dataIndex={index}
-                >
-                </PlaylistCard>
-              )
-            })
-          }
-        </div>
-      </div>
+        )
+      }
+      {
+        loader && <div className="flex justify-center mt-60"><PuffLoader color="orange"></PuffLoader></div>
+      }
     </>
   )
 }
